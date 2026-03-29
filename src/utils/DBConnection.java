@@ -1,9 +1,6 @@
 package utils;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DBConnection {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -101,6 +98,15 @@ public class DBConnection {
                 )
                 """;
             stm.execute(sqlOrderDetail);
+
+            // tự động tạo tài khoản của manager và chef
+            ResultSet rs = stm.executeQuery("SELECT COUNT(*) FROM users");
+            if (rs.next() && rs.getInt(1) == 0) {
+                String passAdmin = PasswordHasher.hash("admin123");
+                String passChef = PasswordHasher.hash("chef123");
+                stm.execute("INSERT INTO users (username, password, role) VALUES ('admin', '" + passAdmin + "', 'MANAGER')");
+                stm.execute("INSERT INTO users (username, password, role) VALUES ('chef', '" + passChef + "', 'CHEF')");
+            }
 
 
         } catch (SQLException e) {

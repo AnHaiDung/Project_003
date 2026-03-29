@@ -19,7 +19,7 @@ public class UserDAOImpl implements IUserDAO {
         try (Connection conn = DBConnection.openConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
-            ps.setString(2, PasswordHasher.hashPassword(user.getPassword()));
+            ps.setString(2, PasswordHasher.hash(user.getPassword()));
             ps.setString(3, user.getRole().name());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) { return false; }
@@ -31,13 +31,15 @@ public class UserDAOImpl implements IUserDAO {
         try (Connection conn = DBConnection.openConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
-            ps.setString(2, PasswordHasher.hashPassword(password));
+            ps.setString(2, PasswordHasher.hash(password));
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new Users(rs.getInt("id"), rs.getString("username"),
                         rs.getString("password"), UserRole.valueOf(rs.getString("role")));
             }
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

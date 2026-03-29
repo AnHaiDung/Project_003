@@ -10,4 +10,5 @@ public interface IMenuDAO {
     boolean delete(int id);
     List<MenuItem> getAll();
     MenuItem findById(int id);
+    boolean updatePrice(int id, double newPrice);
 }

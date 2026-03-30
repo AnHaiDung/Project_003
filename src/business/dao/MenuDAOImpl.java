@@ -25,7 +25,7 @@ public class MenuDAOImpl implements IMenuDAO{
             ps.setInt(4, item.getStockQuantity());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Không thể thêm món ăn");
             return false;
         }
     }
@@ -42,7 +42,7 @@ public class MenuDAOImpl implements IMenuDAO{
             ps.setInt(5, item.getId());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(" Không thể cập nhật thông tin món ăn");
             return false;
         }
     }
@@ -114,6 +114,7 @@ public class MenuDAOImpl implements IMenuDAO{
             ps.setInt(2, id);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            System.out.println(" Không thể cập nhật thông tin món ăn");
             return false;
         }
     }

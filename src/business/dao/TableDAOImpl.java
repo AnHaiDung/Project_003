@@ -23,7 +23,7 @@ public class TableDAOImpl implements ITableDAO{
             ps.setString(3, table.getStatus().name());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Không thể thêm bàn");
             return false;
         }
     }
@@ -107,6 +107,7 @@ public class TableDAOImpl implements ITableDAO{
             ps.setInt(2, id);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            System.out.println("Không thể cập nhật sức chứa cho bàn này.");
             return false;
         }
     }

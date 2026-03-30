@@ -38,8 +38,25 @@ public class UserDAOImpl implements IUserDAO {
                         rs.getString("password"), UserRole.valueOf(rs.getString("role")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Quá trình đăng nhập gặp sự cố kết nối.");
         }
         return null;
+    }
+
+    @Override
+    public boolean isUsernameExist(String username) {
+        String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
+        try (Connection conn = DBConnection.openConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Không thể kiểm tra trùng lặp tài khoản.");
+        }
+        return false;
     }
 }

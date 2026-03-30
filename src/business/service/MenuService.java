@@ -19,6 +19,12 @@ public class MenuService {
             System.out.println("Giá phải lớn hơn 0");
             return false;
         }
+        boolean isExist = menuDAO.getAll().stream().anyMatch(m -> m.getName().equalsIgnoreCase(item.getName()));
+
+        if (isExist) {
+            System.out.println("món ăn đã có trong thực đơn");
+            return false;
+        }
         return menuDAO.add(item);
     }
 

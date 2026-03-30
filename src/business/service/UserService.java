@@ -15,6 +15,11 @@ public class UserService {
 
     public boolean signUp(Users user) {
         if (user.getUsername().length() < 3){
+            System.out.println(" Tên đăng nhập phải có ít nhất 3 ký tự");
+            return false;
+        }
+        if (userDAO.isUsernameExist(user.getUsername())) {
+            System.out.println("Tên đăng nhập đã tồn tại");
             return false;
         }
         return userDAO.register(user);

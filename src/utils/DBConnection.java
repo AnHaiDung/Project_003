@@ -92,7 +92,7 @@ public class DBConnection {
                     order_id int,
                     item_id int,
                     quantity int not null check(quantity > 0),
-                    status enum('PENDING', 'COOKING', 'READY', 'SERVED') default 'PENDING',
+                    status enum('PENDING', 'COOKING', 'READY', 'SERVED', 'CANCELED') default 'PENDING',
                     FOREIGN KEY (order_id) REFERENCES orders(id),
                     FOREIGN KEY (item_id) REFERENCES menu_items(id)
                 )

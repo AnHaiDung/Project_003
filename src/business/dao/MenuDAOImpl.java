@@ -31,23 +31,6 @@ public class MenuDAOImpl implements IMenuDAO{
     }
 
     @Override
-    public boolean update(MenuItem item) {
-        String sql = "UPDATE menu_items SET name = ?, price = ?, category = ?, stock_quantity = ? WHERE id = ?";
-        try (Connection conn = DBConnection.openConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, item.getName());
-            ps.setDouble(2, item.getPrice());
-            ps.setString(3, item.getCategory().name());
-            ps.setInt(4, item.getStockQuantity());
-            ps.setInt(5, item.getId());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.out.println(" Không thể cập nhật thông tin món ăn");
-            return false;
-        }
-    }
-
-    @Override
     public boolean delete(int id) {
         String sql = "DELETE FROM menu_items WHERE id = ?";
         try (Connection conn = DBConnection.openConnection();
@@ -115,6 +98,21 @@ public class MenuDAOImpl implements IMenuDAO{
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println(" Không thể cập nhật thông tin món ăn");
+            return false;
+        }
+    }
+
+
+    @Override
+    public boolean updateStock(int id, int quantity) {
+        String sql = "UPDATE menu_items SET stock_quantity = stock_quantity - ? WHERE id = ? AND stock_quantity >= ?";
+        try (Connection conn = DBConnection.openConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantity);
+            ps.setInt(2, id);
+            ps.setInt(3, quantity);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
             return false;
         }
     }

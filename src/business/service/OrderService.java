@@ -36,10 +36,6 @@ public class OrderService {
         return orderDAO.getDetailsByStatus(OrderStatus.PENDING);
     }
 
-    public List<OrderDetail> getCookingQueue() {
-        return orderDAO.getDetailsByStatus(OrderStatus.COOKING);
-    }
-
     public boolean updateStatus(int detailId, OrderStatus status) {
         boolean success = orderDAO.updateDetailStatus(detailId, status);
         if (success && status == OrderStatus.COOKING) {
@@ -54,10 +50,6 @@ public class OrderService {
             }
         }
         return success;
-    }
-
-    public List<OrderDetail> getCustomerOrders(int userId) {
-        return orderDAO.getDetailsByStatus(OrderStatus.PENDING);
     }
 
     public boolean serveItem(int detailId) {
@@ -82,5 +74,29 @@ public class OrderService {
 
     public List<OrderDetail> getDetailsByOrderId(int orderId) {
         return orderDAO.getDetailsByOrderId(orderId);
+    }
+
+    public boolean nextStep(int detailId) {
+        OrderDetail detail = orderDAO.findDetailById(detailId);
+        if (detail == null) return false;
+
+        switch (detail.getStatus()) {
+            case PENDING:
+                boolean ok = orderDAO.updateDetailStatus(detailId, OrderStatus.COOKING);
+                if (ok) {
+                    menuDAO.updateStock(detail.getItemId(), detail.getQuantity());
+                }
+                return ok;
+            case COOKING:
+                return orderDAO.updateDetailStatus(detailId, OrderStatus.READY);
+            case READY:
+                return orderDAO.updateDetailStatus(detailId, OrderStatus.SERVED);
+            default:
+                return false;
+        }
+    }
+
+    public List<OrderDetail> getDetailsByStatus(OrderStatus status) {
+        return orderDAO.getDetailsByStatus(status);
     }
 }

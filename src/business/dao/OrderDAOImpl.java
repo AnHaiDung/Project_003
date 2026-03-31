@@ -146,4 +146,26 @@ public class OrderDAOImpl implements IOrderDAO {
             return false;
         }
     }
+
+    @Override
+    public OrderDetail findDetailById(int detailId) {
+        String sql = "SELECT * FROM order_details WHERE id = ?";
+        try (Connection conn = DBConnection.openConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, detailId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new OrderDetail(
+                        rs.getInt("id"),
+                        rs.getInt("order_id"),
+                        rs.getInt("item_id"),
+                        rs.getInt("quantity"),
+                        OrderStatus.valueOf(rs.getString("status"))
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

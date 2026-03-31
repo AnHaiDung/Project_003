@@ -14,4 +14,5 @@ public interface IOrderDAO {
     boolean updateDetailStatus(int detailId, OrderStatus newStatus);
     Order findActiveOrderByUser(int userId);
     boolean cancelOrderDetail(int detailId, int userId);
+    OrderDetail findDetailById(int detailId);
 }

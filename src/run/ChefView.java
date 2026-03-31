@@ -45,7 +45,7 @@ public class ChefView {
                             int id = Integer.parseInt(idStr2);
                             if (checkCurrentStatus(id, OrderStatus.PENDING)) {
                                 if (orderService.updateStatus(id, OrderStatus.COOKING)) {
-                                    System.out.println("Đã chuyển sang COOKING & Trừ kho thành công.");
+                                    System.out.println("Đã chuyển sang COOKING và trừ kho thành công.");
                                 } else {
                                     System.out.println("Lỗi khi cập nhật trạng thái hoặc trừ kho.");
                                 }
